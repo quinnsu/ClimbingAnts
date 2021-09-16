@@ -10,8 +10,7 @@ import static com.kingyu.flappybird.util.Constant.FRAME_Y;
 import static com.kingyu.flappybird.util.Constant.FPS;
 import static com.kingyu.flappybird.util.Constant.GAME_TITLE;
 
-import java.awt.Frame;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -28,6 +27,8 @@ public class Game extends Frame {
     private static final long serialVersionUID = 1L; // 保持版本的兼容性
 
     private static int gameState; // 游戏状态
+    private static int gameRound; //游戏回合
+
     public static final int GAME_READY = 0; // 游戏未开始,选择可演示的情况
     public static final int GAME_START = 1; // 游戏开始，演示选中的情况
     public static final int STATE_OVER = 2; // 游戏结束，显示当前情况下的蚂蚁最短时间、最长时间
@@ -65,15 +66,64 @@ public class Game extends Frame {
                 System.exit(0); // 结束程序
             }
         });
+        addKeyListener(new SpaceKeyListener()); // 添加按键监听
 
+    }
+    // 用于接收按键事件的对象的内部类
+    class SpaceKeyListener implements KeyListener {
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        // 按键按下，根据游戏当前的状态调用不同的方法
+        public void keyPressed(KeyEvent e) {
+            int keycode = e.getKeyCode();
+            switch (gameState) {
+                case GAME_READY:
+                    if (keycode == KeyEvent.VK_SPACE) {
+                        // 游戏启动界面时按下空格，重置蚂蚁的位置和方向，并开始下一局游戏
+                        time=0; //重置游戏计时器
+
+                        if (gameRound<32) { //如果超出32局则游戏无法再次启动
+                            for (int j = 0; j < ANT_AMOUNT; j++) // 重置蚂蚁的初始position
+                            {
+                                antList.get(j).setPos(positions[j]);
+                            }
+
+                            //给蚂蚁赋初始方向 根据当前的gameRound，计算出五位二进制数，分别给蚂蚁赋方向
+                            for (int i = antList.size()-1; i >= 0; i--) {
+                                int direction = gameRound >>> i & 1;
+                                antList.get(i).setDirection(direction);
+                                System.out.println( antList.get(i).getOrder()+"号蚂蚁的方向是"+direction+"\n");
+                            }
+
+                            setGameState(GAME_START); // 游戏状态改变
+                        }
+                    }
+                    break;
+                case GAME_START:
+                    if (keycode == KeyEvent.VK_SPACE) {
+                        //游戏过程中按下空格，应该没反应叭
+                    }
+                    break;
+                case STATE_OVER:
+                    if (keycode == KeyEvent.VK_SPACE) {
+                        setGameState(GAME_READY);
+                        //游戏结束时按下空格，重新开始游戏
+                        gameRound++;// 游戏回合计数器增加
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+        }
     }
 
 
-    private void resetGame() {
-        setGameState(GAME_READY);
-        // gameElement.reset();
-        //bird.reset();
-    }
 
 
     // 初始化游戏中的各个对象
@@ -85,18 +135,12 @@ public class Game extends Frame {
         for (int j = 0; j< ANT_AMOUNT ;j++) //初始化蚂蚁List，传入Ant的初始位置和序号
         {
             ant = new Ant(positions[j],j);
-
-            //后面要改，暂时把第二个和第四个蚂蚁初始方向设为左
-            if(j==1)
-                ant.turnRound();
-
-            if(j==3)
-                ant.turnRound();
-
             antList.add(ant);
         }
-
+        gameRound=0; //初始化游戏回合
+        time=0; //初始化计时器
         setGameState(GAME_READY);
+
 
         // 启动用于刷新窗口的线程
         new Thread(() ->{
@@ -126,14 +170,17 @@ public class Game extends Frame {
 
         if (gameState == GAME_READY) { // 游戏未开始
             // 选定当前演示的情况
-            // 输入初始位置和方向
-            time=0; //初始化计时器
-            setGameState(GAME_START);
-        } else if(gameState == STATE_OVER) { // 游戏结束
-            System.out.println(time);  // 展示结果
-            timeDisplay.draw(g,time);//绘制时间结果
+            pole.draw(bufG); //绘制木棍
+            g.drawImage(bufImg, 0, 0, null);
 
-            //如果选择进行下一项，切换到READY状态
+            //绘制提醒文字
+            g.setColor(Color.white);
+            g.setFont(Constant.SCORE_FONT);
+            g.drawString("按空格开始游戏",Constant.INIT_POSITION,Constant.INIT_HEIGHT);
+
+
+        } else if(gameState == STATE_OVER) { // 游戏结束
+            timeDisplay.draw(g,gameRound,time);//绘制时间结果
 
         }
         else { //游戏开始
@@ -145,10 +192,13 @@ public class Game extends Frame {
             }
             g.drawImage(bufImg, 0, 0, null); // 一次性将图片绘制到屏幕上
             testCollision(); //检测碰撞
-            time++; //计时器增加
+            time++;//计时器增加
 
-            if (testAllOutOfBounds()==true) //全部蚂蚁出界则游戏结束
+            if (testAllOutOfBounds()==true) //全部蚂蚁出界则本回合游戏结束
+            {
                 setGameState(STATE_OVER);
+
+            }
         }
 
     }
@@ -171,7 +221,7 @@ public class Game extends Frame {
                   {
                     if(antList.get(n).isStop()==false)
                      {
-                         System.out.println("撞击时，m和n的pos分别是"+antList.get(m).getPos()+" "+antList.get(n).getPos());
+                         System.out.println("撞击时，两只蚂蚁的坐标分别是"+antList.get(m).getPos()+" "+antList.get(n).getPos());
                          antList.get(m).turnRound();
                          antList.get(n).turnRound();
                          break;

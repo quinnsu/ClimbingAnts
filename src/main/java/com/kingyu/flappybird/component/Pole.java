@@ -19,7 +19,7 @@ public class Pole {
         g.setColor(Constant.BG_COLOR);
         g.fillRect(0, 0, Constant.FRAME_WIDTH, Constant.FRAME_HEIGHT);
 
-        g.drawImage(PoleImg,Constant.INIT_POSITION,200, Constant.POLE_LENGTH,20,null);
+        g.drawImage(PoleImg,Constant.INIT_POSITION+30,Constant.INIT_HEIGHT, Constant.POLE_LENGTH,20,null);
     }
 
     //初始化木棍资源

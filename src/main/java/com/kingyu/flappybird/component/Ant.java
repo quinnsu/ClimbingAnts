@@ -99,6 +99,14 @@ public class Ant {
         return order;
     }
 
+    public void setDirection(int direction)
+    {
+        this.direction=direction;
+    }
 
+    public void setPos(int position)
+    {
+        this.pos=Constant.INIT_POSITION+position;
+    }
 
 }
