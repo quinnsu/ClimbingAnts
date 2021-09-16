@@ -221,7 +221,8 @@ public class Game extends Frame {
                   {
                     if(antList.get(n).isStop()==false)
                      {
-                         System.out.println("撞击时，两只蚂蚁的坐标分别是"+antList.get(m).getPos()+" "+antList.get(n).getPos());
+                         System.out.println("撞击时，两只蚂蚁的坐标分别是"+(antList.get(m).getPos()-Constant.INIT_POSITION)+
+                                 " "+(antList.get(n).getPos()-Constant.INIT_POSITION));
                          antList.get(m).turnRound();
                          antList.get(n).turnRound();
                          break;
