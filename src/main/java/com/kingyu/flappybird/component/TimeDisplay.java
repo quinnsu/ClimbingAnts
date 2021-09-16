@@ -14,10 +14,12 @@ public class TimeDisplay {
     public void draw(Graphics g,int game_round,int cur_time)
     {
         //更新最长时间和最短时间
-        if (cur_time<shortest_time)
+        if (cur_time<shortest_time) {
             shortest_time=cur_time;
-        if (cur_time>longgest_time)
+        }
+        if (cur_time>longgest_time) {
             longgest_time=cur_time;
+        }
 
        //绘制当前时间、最长时间和最短时间
         g.setColor(Color.white);
@@ -27,11 +29,5 @@ public class TimeDisplay {
         g.drawString("最短耗时为   ： "+shortest_time,100,200);
         g.drawString( "最长耗时为   ： "+longgest_time,100,250);
         g.drawString("按下空格开始下一局",100,400);
-
-
-
-
-
-
     }
 }
