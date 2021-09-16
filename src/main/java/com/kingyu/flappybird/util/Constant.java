@@ -49,7 +49,7 @@ public class Constant {
 
 	// 游戏刷新率
 	//public static final int FPS = 1000 / 30;
-	public static final int FPS = 400;
+	public static final int FPS = 50;
 
 
 	public static final Font CURRENT_SCORE_FONT = new Font("华文琥珀", Font.BOLD, 32);// 字体
