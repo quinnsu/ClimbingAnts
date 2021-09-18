@@ -9,6 +9,6 @@ package com.kingyu.flappybird.app;
 
 public class App {
 	public static void main(String[] args) {
-		new Game();
+		new PlayRoom();
 	}
 }

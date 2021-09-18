@@ -3,6 +3,8 @@ package com.kingyu.flappybird.app;
 import com.kingyu.flappybird.component.*;
 import com.kingyu.flappybird.util.Constant;
 
+import javax.swing.*;
+
 import static com.kingyu.flappybird.util.Constant.FRAME_HEIGHT;
 import static com.kingyu.flappybird.util.Constant.FRAME_WIDTH;
 import static com.kingyu.flappybird.util.Constant.FRAME_X;
@@ -20,7 +22,7 @@ import java.util.List;
  * 游戏主体，管理游戏的组件和窗口绘制
  */
 
-public class Game extends Frame {
+public class Game extends Frame                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {
     private static int gameState; // 游戏状态
     private static int gameRound; //游戏回合
 
@@ -32,6 +34,9 @@ public class Game extends Frame {
 
     List<Ant> antList;//当前蚂蚁列表
     private int[] positions={30,80,110,160,250}; //蚂蚁初始位置数组
+    private int speed = 5;
+    private int poloLength = 300;
+
 
     private Pole pole;//木棍对象
 
@@ -48,37 +53,44 @@ public class Game extends Frame {
     int shortest_time=99999,longgest_time=0;
 
     // 在构造器中初始化
-    public Game() {
+    public Game(int poloLength,int[] positions,int speed) {
+        this.poloLength = poloLength;
+        this.positions=positions;
+        this.speed=speed;
         initFrame(); // 初始化游戏窗口
         initGame(); // 初始化游戏对象
+
     }
 
     // 初始化游戏窗口
     private void initFrame() {
         setSize(FRAME_WIDTH, FRAME_HEIGHT); // 设置窗口大小
         setTitle(GAME_TITLE); // 设置窗口标题
-        //setLocation(FRAME_X, FRAME_Y); // 窗口初始位置
+        setLocation(FRAME_X, FRAME_Y); // 窗口初始位置
         setResizable(false); // 设置窗口大小不可变
 
         // 添加关闭窗口事件（监听窗口发生的事件，派发给参数对象，参数对象调用对应的方法）
-        addWindowListener(new WindowAdapter() {
+      addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0); // 结束程序
             }
         });
+
+
         setVisible(true); // 窗口默认为不可见，设置为可见
+
     }
 
     // 初始化游戏中的各个对象
     private void initGame() {
-        pole = new Pole();//初始化木棍
+        pole = new Pole(poloLength);//初始化木棍
         antList= new ArrayList<>();
-        timeDisplay = new TimeDisplay();//初始化展示分数
+
 
         for (int j = 0; j< ANT_AMOUNT;j++) //初始化蚂蚁List，传入Ant的初始位置和序号
         {
-            Ant ant = new Ant(positions[j],j);
+            Ant ant = new Ant(positions[j],j,speed);
             antList.add(ant);
         }
         gameRound=0; //初始化游戏回合
@@ -207,7 +219,7 @@ public class Game extends Frame {
     {
         for (int m = 0; m < antList.size(); m++)
         {
-            if(antList.get(m).getPos() > Constant.INIT_POSITION && antList.get(m).getPos() < Constant.INIT_POSITION+Constant.POLE_LENGTH)
+            if(antList.get(m).getPos() > Constant.INIT_POSITION && antList.get(m).getPos() < Constant.INIT_POSITION+poloLength)
             {
 
                 return false;

@@ -23,13 +23,13 @@ public class Ant {
     private final int order;
 
     //蚂蚁的速度
-    private final int speed=5;
+    private int speed=5;
 
-    public Ant(int pos,int order)
+    public Ant(int pos,int order,int speed)
     {
         this.pos=Constant.INIT_POSITION+pos;//初始化蚂蚁的位置
         this.order=order;//初始化蚂蚁的序号
-
+        this.speed=speed;//初始化蚂蚁的速度
         antImg = GameUtil.loadBufferedImage(Constant.ANT_IMG_PATH[this.order]);//初始化蚂蚁图片
     }
 
@@ -50,9 +50,9 @@ public class Ant {
         }
         else if (direction == RIGHT) {
             pos = pos + speed;
-            if (pos >= Constant.POLE_LENGTH + Constant.INIT_POSITION)
+            if (pos >= Pole.length + Constant.INIT_POSITION)
             {
-                pos = Constant.POLE_LENGTH + Constant.INIT_POSITION;
+                pos = Pole.length + Constant.INIT_POSITION;
                 direction=STOP;
             }
         }
