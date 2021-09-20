@@ -66,8 +66,14 @@ public class PlayRoom extends JFrame {
                     }
                     else {
                         setVisible(false);
-                        new Game(poloLength, positions, speed);
-                        dispose();
+                        Game game = new Game(poloLength, positions, speed);//开始游戏
+                        game.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                super.windowClosed(e);
+                                setVisible(true);
+                            }
+                        });
                     }
                 }
 

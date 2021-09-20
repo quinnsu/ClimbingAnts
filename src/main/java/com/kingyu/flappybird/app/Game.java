@@ -38,6 +38,7 @@ public class Game extends Frame                                                 
     private int poloLength = 300;
 
 
+
     private Pole pole;//木棍对象
 
     private int time; //计时器
@@ -48,9 +49,11 @@ public class Game extends Frame                                                 
     // （双缓冲）单独定义一张图片，将需要绘制的内容绘制到这张图片，再一次性地将图片绘制到窗口
     private final BufferedImage bufImg = new BufferedImage(FRAME_WIDTH, FRAME_HEIGHT, BufferedImage.TYPE_4BYTE_ABGR);
 
-    private TimeDisplay timeDisplay; //游戏结束时显示耗时
+
 
     int shortest_time=99999,longgest_time=0;
+
+
 
     // 在构造器中初始化
     public Game(int poloLength,int[] positions,int speed) {
@@ -69,11 +72,14 @@ public class Game extends Frame                                                 
         setLocation(FRAME_X, FRAME_Y); // 窗口初始位置
         setResizable(false); // 设置窗口大小不可变
 
+
+
+
         // 添加关闭窗口事件（监听窗口发生的事件，派发给参数对象，参数对象调用对应的方法）
       addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                System.exit(0); // 结束程序
+                dispose(); // 结束程序
             }
         });
 
@@ -145,8 +151,9 @@ public class Game extends Frame                                                 
                 }
                 setGameState(GAME_START); // 游戏状态改变
             }
+            else //开始新的一轮
+                g.drawString("关闭当前窗口开启新的一轮",50,250);
         } else if(gameState == STATE_OVER) { // 游戏结束
-            //timeDisplay.draw(g,gameRound,time);//绘制时间结果
 
             //更新最长时间和最短时间
             if (time<shortest_time) {
@@ -159,6 +166,9 @@ public class Game extends Frame                                                 
             System.out.println("第"+gameRound+"局结束，用时："+time);
             gameRound++;
             setGameState(GAME_READY);
+
+
+
         }
         else { //游戏开始
             pole.draw(bufG); //绘制木棍
@@ -200,14 +210,14 @@ public class Game extends Frame                                                 
         {
             if (antList.get(m).isStop()==false) {
                 for (int n = m + 1; n < antList.size(); n++) {
-                    if (antList.get(m).getPos() == antList.get(n).getPos()) {
-                        if (antList.get(n).isStop() == false) {
-                            //System.out.println("撞击时，两只蚂蚁的坐标分别是" + (antList.get(m).getPos() - Constant.INIT_POSITION) +
-                             //       " " + (antList.get(n).getPos() - Constant.INIT_POSITION));
+                    if (twoAntsCollison(m,n)) {
+
+                           // System.out.println("撞击时，两只蚂蚁的坐标分别是" + (antList.get(m).getPos() - Constant.INIT_POSITION) +
+                            //        " " + (antList.get(n).getPos() - Constant.INIT_POSITION));
                             antList.get(m).turnRound();
                             antList.get(n).turnRound();
                             break;
-                        }
+
                     }
                 }
             }
@@ -226,6 +236,39 @@ public class Game extends Frame                                                 
             }
         }
         return true;
+    }
+
+    //检测两只蚂蚁距离是否小于等于一个speed单位，即，此刻刚好撞上或在下一时刻前即将撞上
+    public boolean twoAntsCollison(int m,int n)
+    {
+        //弱小的向右 大的向左
+        int left,right,distance;
+        int pos_m = antList.get(m).getPos();
+        int pos_n = antList.get(n).getPos();
+        if (pos_m<=pos_n)
+        {
+            left = m;
+            right =n;
+            distance = pos_n - pos_m;
+        }
+        else
+        {
+            left = n;
+            right = m;
+            distance = pos_m - pos_n;
+        }
+        if (distance == 0 &&
+                antList.get(left).getDirection()+antList.get(right).getDirection() == 1)
+            return true;
+
+        else if ( distance>0 && distance <=speed &&
+                (antList.get(left).getDirection()==1 && antList.get(right).getDirection() == 0) )
+        {
+
+            return true;
+        }
+
+        return false;
     }
 
 }

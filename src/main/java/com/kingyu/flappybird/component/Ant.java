@@ -93,4 +93,9 @@ public class Ant {
         this.pos=Constant.INIT_POSITION+position;
     }
 
+    public int getDirection()
+    {
+        return direction;
+    }
+
 }
