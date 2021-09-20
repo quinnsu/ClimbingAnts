@@ -1,18 +1,13 @@
-package com.kingyu.flappybird.util;
+package com.kingyu.climbingants.util;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
 
 import javax.imageio.ImageIO;
 
 /**
  * 工具类，游戏中用到的工具都在此类
- *
- *
  */
 public class GameUtil {
 
@@ -32,17 +27,6 @@ public class GameUtil {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     *
-     * @param image:图片资源
-     * @param x：x坐标
-     * @param y：y坐标
-     * @param g：画笔
-     */
-    public static void drawImage(BufferedImage image, int x, int y, Graphics g) {
-        g.drawImage(image, x, y, null);
     }
 
 }
