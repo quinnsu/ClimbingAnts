@@ -126,14 +126,6 @@ public class CreepingGame extends Frame                                         
                 }
                 setGameState(GAME_START);
             }
-            else {
-                g.drawString("最短耗时为：" + shortest_time,50,100);
-                g.drawString( "最长耗时为： " + longgest_time,50,130);
-                g.drawString( "本局当前耗时为： " + time,50,160);
-
-                g.drawString("关闭当前窗口开启新游戏",50,250);
-                return;
-            }
         } else if(gameState == GAME_OVER) {
             //更新最长时间和最短时间
             if (time<shortest_time) {
@@ -166,6 +158,10 @@ public class CreepingGame extends Frame                                         
         g.drawString("最短耗时为：" + shortest_time,50,100);
         g.drawString( "最长耗时为： " + longgest_time,50,130);
         g.drawString( "本局当前耗时为： " + time,50,160);
+
+        if (gameRound >= 1<<antNum) {
+            g.drawString("关闭当前窗口开启新游戏",50,250);
+        }
     }
 
     //遍历antList，返回坐标相同的ant序号，若没有返回-1；

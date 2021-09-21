@@ -38,5 +38,5 @@ public class Constant {
 	public static final Color BG_COLOR = new Color(0x4bc4cf);
 
 	// 游戏字体
-	public static final Font SCORE_FONT = new Font("华文琥珀", Font.PLAIN, 24);// 字体
+	public static final Font SCORE_FONT = new Font("仿宋", Font.PLAIN, 24);// 字体
 }

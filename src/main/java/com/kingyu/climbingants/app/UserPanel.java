@@ -25,7 +25,7 @@ public class UserPanel extends JFrame {
 
     private void initFrame() {
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        setTitle(GAME_TITLE);
+        setTitle("showing");
         setLocation(FRAME_X, FRAME_Y);
         setResizable(false);
 
@@ -56,9 +56,9 @@ public class UserPanel extends JFrame {
         add(label2);
         add(antNumText);
         add(label3);
-        add(initialPosText);
-        add(label4);
         add(speedText);
+        add(label4);
+        add(initialPosText);
         add(button);
 
         // 添加关闭窗口事件（监听窗口发生的事件，派发给参数对象，参数对象调用对应的方法）
@@ -129,9 +129,8 @@ public class UserPanel extends JFrame {
     }
 
     private static int[] stringToIntArr(String str) {
-        int[] intArr = new int[antNum];
         String[] arr = str.split("\\s+");
-
+        int[] intArr = new int[arr.length];
         for (int i = 0; i < arr.length; i++) {
             intArr[i] =Integer.parseInt(arr[i]);
         }
@@ -145,7 +144,7 @@ public class UserPanel extends JFrame {
     }
 
     private boolean checkAntNum(int antNum) {
-        return antNum > 0;
+        return antNum > 0 && antNum <= 5;
     }
 
     private boolean checkSpeed(int speed) {
